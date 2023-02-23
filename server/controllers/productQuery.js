@@ -37,6 +37,7 @@ exports.getOneProduct = (req, res) => {
       Features.findOne({ id: number })
         .then((featureData) => {
           next.features = featureData.features;
+          console.log(next);
           res.json(next);
         });
     }).catch((err) => {
