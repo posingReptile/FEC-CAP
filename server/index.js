@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
@@ -7,6 +8,11 @@ const axios = require('axios');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const db = require('../db');
+const {
+  getProducts, getOneProduct, getFeatures, getRelatedProduct,
+} = require('./controllers/productQuery');
+const { getStyle } = require('./controllers/styleQuery');
 
 const app = express();
 
@@ -14,45 +20,54 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+// app.use(express.static('../loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3.txt'));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.urlencoded({ extended: true }));
 
 // ----- Routes ----- //
-app.get('/products', (req, res) => {
-  axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe/products', {
-    headers: {
-      Authorization: process.env.AUTH_SECRET,
-    },
-  })
-    .then(({ data }) => {
-      res.status(200);
-      res.send(data);
-      res.end();
-    })
-    .catch(() => res.send('Failed to get products'));
+// app.get('/products', (req, res) => {
+//   axios.get('https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe/products', {
+//     headers: {
+//       Authorization: process.env.AUTH_SECRET,
+//     },
+//   })
+//     .then(({ data }) => {
+//       res.status(200);
+//       res.send(data);
+//       res.end();
+//     })
+//     .catch(() => res.send('Failed to get products'));
+// });
+app.get('/loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3', (req, res) => {
+  res.send('loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3');
 });
+app.get('/products', getProducts);
 
-app.get('/products/:product_id/styles', (req, res) => {
-  const { product_id } = req.params;
-  console.log('Request received for styles at product', product_id);
+// app.get('/products/:product_id/styles', (req, res) => {
+//   const { product_id } = req.params;
+//   console.log('Request received for styles at product', product_id);
 
-  axios.get(`https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe/products/${product_id}/styles`, {
-    headers: {
-      Authorization: process.env.AUTH_SECRET,
-    },
-    params: {
-      product_id,
-      page: 1,
-      count: 100,
-    },
-  })
-    .then(({ data }) => {
-      res.status(200);
-      res.send(data);
-      res.end();
-    })
-    .catch(() => res.send('Failed to get styles'));
-});
+//   axios.get(`https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe/products/${product_id}/styles`, {
+//     headers: {
+//       Authorization: process.env.AUTH_SECRET,
+//     },
+//     params: {
+//       product_id,
+//       page: 1,
+//       count: 100,
+//     },
+//   })
+//     .then(({ data }) => {
+//       res.status(200);
+//       res.send(data);
+//       console.log(data);
+//       res.end();
+//     })
+//     .catch(() => res.send('Failed to get styles'));
+// });
+
+app.get('/products/:product_id/styles', getStyle);
 
 app.post('/cart', (req, res) => {
   console.log('getting cart post request');
@@ -76,17 +91,22 @@ app.post('/cart', (req, res) => {
 // This is for all products GET
 // replicate the HR API syntax
 // ----------- Added Routes
-const baseUrl = 'https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe';
-const headers = { Authorization: process.env.AUTH_SECRET };
-app.get('/products/:id/?*', (req, res) => {
-  console.log(`GET request received from ${req.originalUrl}`);
+// const baseUrl = 'https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfe';
+// const headers = { Authorization: process.env.AUTH_SECRET };
+// app.get('/products/:id/?*', (req, res) => {
+//   console.log(`GET request received from ${req.originalUrl}`);
 
-  const url = path.join(baseUrl, req.originalUrl);
-  axios.get(url, { headers })
-    .then(({ data }) => res.json(data))
-    .catch(console.log);
-});
+//   const url = path.join(baseUrl, req.originalUrl);
+//   axios.get(url, { headers })
+//     .then(({ data }) => {
+//       console.log(data);
+//       res.json(data);
+//     })
+//     .catch(console.log);
+// });
 // -------------------------
+
+app.get('/products/:id/?*', getOneProduct);
 
 app.get('/reviews', (req, res) => {
   console.log('GET request received from /reviews');

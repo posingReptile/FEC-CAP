@@ -7,3 +7,5 @@ yarn.lock
 # .DS_Store
 coverage
 yarn-error.log
+newrelic_agent.log
+newrelic.js

@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, {
+  useState, useMemo, useRef, useEffect,
+} from 'react';
 import { GiAmericanShield } from 'react-icons/gi';
 import { format } from 'date-fns';
 import RelatedProducts from './related_products/RelatedProducts';
@@ -10,11 +12,10 @@ import StarReference from './shared/StarReference';
 import '../styles/styles.scss';
 import { DarkModeProvider } from './shared/DarkModeProvider';
 
-
 /* ----------- Set up id state -------------- */
 export default function App() {
   // later this initial id should be passed down from index.jsx as props
-  const [id, setId] = useState(37318);
+  const [id, setId] = useState(37311);
   const [dark, goDark] = useState(false);
   const [appAvgRating, setAppAvgRating] = useState(5);
   const [productDetails, setDetails] = useState({});
@@ -35,7 +36,7 @@ export default function App() {
     history.pushState({ id }, '');
 
     function setIdByHistory(event) {
-      const state = event.state;
+      const { state } = event;
 
       if (state) setId(state.id);
     }
@@ -71,9 +72,9 @@ export default function App() {
           )
           : (
             <>
-              <RelatedProducts id={id} setId={setId} handleTrackClick={handleTrackClick}/>
+              {/* <RelatedProducts id={id} setId={setId} handleTrackClick={handleTrackClick} /> */}
               <h3 className="testing-header"> Questions and Answers</h3>
-              <QuestionsAnswers id={id} productName="A Purty Pink Jacket" handleTrackClick={handleTrackClick}/>
+              <QuestionsAnswers id={id} productName="A Purty Pink Jacket" handleTrackClick={handleTrackClick} />
               <RatingsReviews
                 productID={id}
                 productName={productDetails.name}
