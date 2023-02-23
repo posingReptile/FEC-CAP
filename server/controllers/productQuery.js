@@ -8,49 +8,47 @@ const Products = require('../../db/models/productSchema');
 const Features = require('../../db/models/featureSchema');
 const RelatedProduct = require('../../db/models/relatedSchema');
 
+// console.time('getProducts');
+// console.timeEnd('getProducts');
 exports.getProducts = (req, res) => {
-  console.time('getProducts');
-  Products.find().limit(5)
+  const count = req.query.count || 5;
+  const page = req.query.page || 1;
+  const amount = count * page;
+  Products.find({ id: { $lte: amount } })
     .then((data) => {
-      console.log('from get', data);
       res.json(data);
     }).catch((err) => {
       console.log(err);
     });
-  console.timeEnd('getProducts');
 };
 
 exports.getOneProduct = (req, res) => {
   const pid = req.originalUrl;
   const number = pid.match(/\d+/g) - 37310;
-  console.log(pid);
-  console.log(`GET request received from ${number}`);
+  // console.log(`GET request received from ${number}`);
   let result;
-  console.time('getOneProduct');
+  // console.time('getOneProduct');
   Products.findOne({ id: number })
     .then((data) => {
       const copy = { ...data._doc };
-      delete copy._id;
-      delete copy.__v;
       return copy;
     }).then((next) => {
       Features.findOne({ id: number })
         .then((featureData) => {
           next.features = featureData.features;
-          console.log(next);
+          // console.log(next);
           res.json(next);
-          console.timeEnd('getOneProduct');
+          // console.timeEnd('getOneProduct');
         });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.log(err);
     });
 };
 
 exports.getRelatedProduct = (req, res) => {
-  console.log('started getall');
   RelatedProduct.find().limit(5)
     .then((data) => {
-      console.log('from get', data);
       res.json(data);
     }).catch((err) => {
       console.log(err);
