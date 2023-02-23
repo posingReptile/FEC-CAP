@@ -39,11 +39,11 @@ exports.getOneProduct = (req, res) => {
           next.features = featureData.features;
           console.log(next);
           res.json(next);
+          console.timeEnd('getOneProduct');
         });
     }).catch((err) => {
       console.log(err);
     });
-  console.timeEnd('getOneProduct');
 };
 
 exports.getRelatedProduct = (req, res) => {

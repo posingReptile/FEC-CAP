@@ -10,13 +10,11 @@ exports.getStyle = (req, res) => {
   console.log('started getStyle');
   const { product_id } = req.params;
   console.time('getStyle');
-  Style.find({ product_id: 1 })
+  Style.findOne({ product_id: product_id - 37310 })
     .then((data) => {
-      // console.log('from get', data);
-      // data[0];
-      res.send(data[0]);
+      console.timeEnd('getStyle');
+      res.send(data);
     }).catch((err) => {
       console.log(err);
     });
-  console.timeEnd('getStyle');
 };
