@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
 // take average of all ratings
-const parseRatings = ratings => {
-  return Object.entries(ratings).reduce((a, b) => {
-    return [ b[0]*b[1] + a[0], +b[1] + a[1] ];
-  }, [0, 0]).reduce((a, b) => a/b);
-};
+const parseRatings = (ratings) => Object.entries(ratings).reduce((a, b) => [b[0] * b[1] + a[0], +b[1] + a[1]], [0, 0]).reduce((a, b) => a / b);
 
 // if no default, take first one
-const parseStyles = styles => {
-  const chosen = styles.results.reduce((a, b) => {
-    return b['default?'] ? b : a;
-  });
+const parseStyles = (styles) => {
+  const chosen = styles.results.reduce((a, b) => (b['default?'] ? b : a));
 
   return {
     originalPrice: chosen.original_price,
     salePrice: chosen.sale_price,
-    photo: chosen.photos[0]
+    photo: chosen.photos[0],
   };
 };
 
@@ -32,12 +26,12 @@ export default function useFetch(id) {
           fetch(`/products/${id}`),
           fetch(`/products/${id}/styles`),
           fetch(`/products/${id}/related`),
-          fetch(`/reviews/meta?product_id=${id}`)
-        ])).map(res => res.json());
+          fetch(`/reviews/meta?product_id=${id}`),
+        ])).map((res) => res.json());
 
         const results = await Promise.all(resultsRaw);
 
-        if (results.some(res => res === null)) {
+        if (results.some((res) => res === null)) {
           throw new Error('Bad status code detected');
         }
 
@@ -47,10 +41,16 @@ export default function useFetch(id) {
 
         setLoading(null);
         setData({
-          id, name, category, features, relatedProducts,
-          originalPrice, salePrice, photo, rating
+          id,
+          name,
+          category,
+          features,
+          relatedProducts,
+          originalPrice,
+          salePrice,
+          photo,
+          rating,
         });
-
       } catch (err) {
         setLoading(null);
         setError(err.message);
@@ -59,9 +59,8 @@ export default function useFetch(id) {
 
     setLoading('Loading...');
     fetchData();
-
   }, [id]);
 
-  //console.log(data)
+  // console.log(data)
   return { loading, data, error };
-};
+}

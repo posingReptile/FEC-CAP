@@ -5,7 +5,7 @@ import ProductCard from './ProductCard';
 import useFetch from './useFetch';
 
 export default function RelatedProduct({ id, setId, handleTrackClick }) {
-  const [modal, setModal] = useState({ show: false, onClickProduct: null })
+  const [modal, setModal] = useState({ show: false, onClickProduct: null });
   const initialOutfits = localStorage.getItem('outfits')
     ? JSON.parse(localStorage.getItem('outfits'))
     : [];
@@ -35,37 +35,34 @@ export default function RelatedProduct({ id, setId, handleTrackClick }) {
   }
 
   function removeOutfit(id) {
-    setOutfits(new Set([...outfits].filter(o_id => o_id !== id)));
+    setOutfits(new Set([...outfits].filter((o_id) => o_id !== id)));
   }
-
-
-
 
   // ## Three kinds of card: (1)related (2)outfit (3)add
   // RELATED PRODUCT card list
-  const relatedCardList = relatedProducts.map(productId => {
+  const relatedCardList = relatedProducts.map((productId) => {
     const relatedCardProps = {
       type: 'related',
       key: productId,
       id: productId,
       cardCallback: () => setId(productId),
-      buttonCallback: toggleModal // this one should have arguments
+      buttonCallback: toggleModal, // this one should have arguments
     };
 
-    return <ProductCard { ...relatedCardProps } />;
+    return <ProductCard {...relatedCardProps} />;
   });
 
   // YOUR OUTFIT card list
-  const outfitCardList = [-1, ...outfits].map(productId => {
+  const outfitCardList = [-1, ...outfits].map((productId) => {
     // The 1st card is an Adder Card
     if (productId === -1) {
       const adderCardProps = {
         type: 'adder',
         key: 'adder',
-        cardCallback: addOutfit
+        cardCallback: addOutfit,
       };
 
-      return <ProductCard { ...adderCardProps } />;
+      return <ProductCard {...adderCardProps} />;
     }
 
     const outfitCardProps = {
@@ -73,27 +70,27 @@ export default function RelatedProduct({ id, setId, handleTrackClick }) {
       key: productId,
       id: productId,
       cardCallback: () => setId(productId),
-      buttonCallback: () => removeOutfit(productId)
+      buttonCallback: () => removeOutfit(productId),
     };
 
-    return <ProductCard { ...outfitCardProps } />;
+    return <ProductCard {...outfitCardProps} />;
   });
 
   const modalProps = {
     closeModal: toggleModal, // this one no arguments
     onClickProduct: modal.onClickProduct,
-    currentProduct
+    currentProduct,
   };
 
   return (
-    <section className='widget__related-product' onClick={(e) => handleTrackClick(e, 'Related Products')} id="RPScroll">
-      <ProductCarousel title='related product'>
+    <section className="widget__related-product" onClick={(e) => handleTrackClick(e, 'Related Products')} id="RPScroll">
+      <ProductCarousel title="related product">
         { relatedCardList }
       </ProductCarousel>
-      <ProductCarousel title='your outfit'>
+      <ProductCarousel title="your outfit">
         { outfitCardList }
       </ProductCarousel>
-      { modal.show ? <ProductModal { ...modalProps } /> : null }
+      { modal.show ? <ProductModal {...modalProps} /> : null }
     </section>
   );
-};
+}

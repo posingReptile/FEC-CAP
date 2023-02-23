@@ -4,7 +4,7 @@ export default function ProductModal(props) {
   const { closeModal, currentProduct, onClickProduct } = props;
 
   const tableHeader = (
-    <tr key='header'>
+    <tr key="header">
       <th>{ currentProduct.name }</th>
       <th>Characteristic</th>
       <th>{ onClickProduct.name }</th>
@@ -12,7 +12,7 @@ export default function ProductModal(props) {
   );
 
   // key => feature; value => [currentVal, clickedVal]
-  const map = new Map;
+  const map = new Map();
   currentProduct.features.forEach(({ feature, value }) => {
     map.set(feature, [value, '']);
   });
@@ -28,7 +28,7 @@ export default function ProductModal(props) {
   // values => [currentValue, clickedValue]
   map.forEach((values, feature) => {
     const row = (
-      <tr key={ feature }>
+      <tr key={feature}>
         <td>{ values[0] === null ? check : values[0] }</td>
         <td>{ feature }</td>
         <td>{ values[1] === null ? check : values[1] }</td>
@@ -42,7 +42,7 @@ export default function ProductModal(props) {
   }
 
   return (
-    <section className='product__modal' onClick={ onClickModal }>
+    <section className="product__modal" onClick={onClickModal}>
       <table>
         <caption>COMPARING</caption>
         <thead>{ tableHeader }</thead>
@@ -50,4 +50,4 @@ export default function ProductModal(props) {
       </table>
     </section>
   );
-};
+}

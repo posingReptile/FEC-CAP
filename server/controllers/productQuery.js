@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
@@ -8,8 +9,6 @@ const Products = require('../../db/models/productSchema');
 const Features = require('../../db/models/featureSchema');
 const RelatedProduct = require('../../db/models/relatedSchema');
 
-// console.time('getProducts');
-// console.timeEnd('getProducts');
 exports.getProducts = (req, res) => {
   const count = req.query.count || 5;
   const page = req.query.page || 1;
@@ -25,9 +24,6 @@ exports.getProducts = (req, res) => {
 exports.getOneProduct = (req, res) => {
   const pid = req.originalUrl;
   const number = pid.match(/\d+/g) - 37310;
-  // console.log(`GET request received from ${number}`);
-  let result;
-  // console.time('getOneProduct');
   Products.findOne({ id: number })
     .then((data) => {
       const copy = { ...data._doc };
@@ -36,9 +32,7 @@ exports.getOneProduct = (req, res) => {
       Features.findOne({ id: number })
         .then((featureData) => {
           next.features = featureData.features;
-          // console.log(next);
           res.json(next);
-          // console.timeEnd('getOneProduct');
         });
     })
     .catch((err) => {
@@ -47,9 +41,10 @@ exports.getOneProduct = (req, res) => {
 };
 
 exports.getRelatedProduct = (req, res) => {
-  RelatedProduct.find().limit(5)
-    .then((data) => {
-      res.json(data);
+  const { product_id } = req.params;
+  RelatedProduct.findOne({ id: product_id - 37310 })
+    .then(({ relatedProductId }) => {
+      res.json(relatedProductId);
     }).catch((err) => {
       console.log(err);
     });

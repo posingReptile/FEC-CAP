@@ -72,7 +72,7 @@ export default function App() {
           )
           : (
             <>
-              {/* <RelatedProducts id={id} setId={setId} handleTrackClick={handleTrackClick} /> */}
+              <RelatedProducts id={id} setId={setId} handleTrackClick={handleTrackClick} />
               <h3 className="testing-header"> Questions and Answers</h3>
               <QuestionsAnswers id={id} productName="A Purty Pink Jacket" handleTrackClick={handleTrackClick} />
               <RatingsReviews

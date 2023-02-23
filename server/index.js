@@ -20,7 +20,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-// app.use(express.static('../loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3.txt'));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.urlencoded({ extended: true }));
@@ -39,9 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 //     })
 //     .catch(() => res.send('Failed to get products'));
 // });
-// app.get('/loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3', (req, res) => {
-//   res.send('loaderio-3af50a992a6eb7fc8f1c76e3c3ab3ba3');
-// });
+
 app.get('/products', getProducts);
 
 // app.get('/products/:product_id/styles', (req, res) => {
@@ -68,6 +65,8 @@ app.get('/products', getProducts);
 // });
 
 app.get('/products/:product_id/styles', getStyle);
+
+app.get('/products/:product_id/related', getRelatedProduct);
 
 app.post('/cart', (req, res) => {
   console.log('getting cart post request');
